@@ -10,9 +10,9 @@ export default function RouteDetailClient({ route }) {
   const { toast } = useToast();
 
   const handlePersonalize = () => {
-    const personalizationUrl = `https://heart.cityheart.run/?city=${encodeURIComponent(route?.city || '')}`;
-    window.open(personalizationUrl, '_blank');
-  };
+  const personalizationUrl = `https://heart.cityheart.run/?route=${route?.slug}`;
+  window.open(personalizationUrl, '_blank');
+};
 
   const handleShare = () => {
     if (navigator.share) {
