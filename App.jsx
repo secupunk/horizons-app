@@ -3,34 +3,26 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { ModalProvider } from './context/ModalContext';
 import LandingPage from './components/LandingPage';
 import RoutesPage from './components/pages/RoutesPage';
-import RouteDetailPage from './components/pages/RouteDetailPage';import ComparePage from './components/pages/ComparePage';// AJOUTÉ : Importation de l'IA Duel
+import RouteDetailPage from './components/pages/RouteDetailPage';
+import ComparePage from './components/pages/ComparePage';
 import FreeLandingPage from './components/pages/FreeLandingPage';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
 import RefundPolicy from './components/pages/RefundPolicy';
 import Navbar from './components/Navbar';
 import ValentineCountdown from './components/ValentineCountdown';
-import useGoogleAnalytics from './hooks/useGoogleAnalytics';
-import { trackPageView as trackGAPageView } from './utils/analytics';
-import { trackPageView as trackPixelPageView } from './utils/pixelTracking';
 import { Toaster } from './components/ui/toaster';
 
+// Version simplifiée pour éviter que le site crash si GA ou Pixel bug
 const AnalyticsWrapper = ({ children }) => {
   const location = useLocation();
   useEffect(() => {
-    // GA Tracking
-    trackGAPageView(location.pathname + location.search);
-    // Meta Pixel Tracking
-    trackPixelPageView();
-    
-    window.scrollTo(0, 0); // Scroll to top on route change
+    window.scrollTo(0, 0);
   }, [location]);
   return children;
 };
 
 function App() {
-  useGoogleAnalytics();
-
   return (
     <Router>
       <ModalProvider>
@@ -48,7 +40,7 @@ function App() {
             <Route path="/routes" element={<RoutesPage />} />
             <Route path="/routes/:slug" element={<RouteDetailPage />} />
             
-            {/* NEW : The World Comparison Ghost Route */}
+            {/* ROUTE DE COMPARAISON */}
             <Route path="/compare/:slug1-vs-:slug2" element={<ComparePage />} />
             
             <Route path="/free" element={<FreeLandingPage />} />
