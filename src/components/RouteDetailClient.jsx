@@ -4,6 +4,7 @@ import { MapPin, Calendar, Navigation, Mountain, Activity, Share2 } from 'lucide
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
 import Breadcrumb from './Breadcrumb';
+import { Helmet } from 'react-helmet-async';
 
 export default function RouteDetailClient({ route }) {
   const { toast } = useToast();
@@ -28,7 +29,28 @@ export default function RouteDetailClient({ route }) {
 
   return (
     <div className="bg-[#0A0E27] min-h-screen text-white pb-20 font-sans">
-      
+      {/* SEO & LLM Optimization */}
+      <Helmet>
+        <title>{`${route.title} - Heart Route in ${route.city} | CityHeart`}</title>
+        <meta 
+          name="description" 
+          content={`Explore and download the GPS track for this romantic ${route.distance_km}km heart-shaped running route in ${route.city}. Perfect for Strava art and unique runs.`} 
+        />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${route.title} - Heart-Shaped Run in ${route.city}`} />
+        <meta property="og:description" content={`Run your heart out in ${route.city} with this unique ${route.distance_km}km GPS route.`} />
+        <meta property="og:image" content={route.image_url} />
+        <meta property="og:url" content={typeof window !== 'undefined' ? window.location.href : ''} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`Heart Running Route: ${route.city}`} />
+        <meta name="twitter:description" content={`Download the GPX for this ${route.distance_km}km heart-shaped route.`} />
+        <meta name="twitter:image" content={route.image_url} />
+      </Helmet>
+
       {/* Hero Header */}
       <div className="relative h-[60vh] min-h-[500px]">
         <img 
