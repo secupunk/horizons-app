@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
+// On a supprimé l'import de RouteDetailClientContent qui faisait planter le build
 const RouteDetailClient = ({ route }) => {
   if (!route) return null;
 
@@ -16,7 +17,7 @@ const RouteDetailClient = ({ route }) => {
           {route.city} <span className="text-pink-500">Heart</span>
         </h1>
         
-        <div className="rounded-[2rem] overflow-hidden border border-white/10 bg-white/5 mb-8">
+        <div className="rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/5 mb-8">
           <img 
             src={route.image_url} 
             alt={route.city} 
