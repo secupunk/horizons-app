@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { ModalProvider } from './context/ModalContext';
 import LandingPage from './components/LandingPage';
 import RoutesPage from './components/pages/RoutesPage';
-import RouteDetailPage from './components/pages/RouteDetailPage';
-import ComparePage from './components/pages/ComparePage'; // AJOUTÉ : Importation de l'IA Duel
+import RouteDetailPage from './components/pages/RouteDetailPage';import ComparePage from './components/pages/ComparePage';// AJOUTÉ : Importation de l'IA Duel
 import FreeLandingPage from './components/pages/FreeLandingPage';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
