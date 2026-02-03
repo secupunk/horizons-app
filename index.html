@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FF1493" />
+    <meta name="msapplication-TileColor" content="#0A1628" />
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- SEO Meta Tags -->
+    <title>CityHeart - Heart-Shaped GPS Running Routes in 100+ Cities</title>
+    <meta name="description" content="Create romantic heart-shaped running routes in your favorite cities worldwide. Available in 100+ cities for €4.99. Perfect gift for couples." />
+    <meta name="keywords" content="heart running route, romantic GPS, couples activity, Valentine's gift" />
+    <link rel="canonical" href="https://cityheart.run/" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cityheart.run/" />
+    <meta property="og:title" content="CityHeart - Trace a Heart Through Your Favorite City" />
+    <meta property="og:description" content="Create unforgettable romantic memories by tracing heart-shaped routes through your favorite cities. The perfect experience for couples." />
+    <meta property="og:image" content="https://cityheart.run/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://cityheart.run/" />
+    <meta property="twitter:title" content="CityHeart - Trace a Heart Through Your Favorite City" />
+    <meta property="twitter:description" content="Create unforgettable romantic memories by tracing heart-shaped routes through your favorite cities." />
+    <meta property="twitter:image" content="https://cityheart.run/og-image.jpg" />
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMD2XM6F23"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-FMD2XM6F23', {
+        'linker': {
+          'domains': ['cityheart.run', 'heart.cityheart.run']
+        }
+      });
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '579590157880412');
+      fbq('track', 'PageView');
+    </script>
+
+    <!-- Fonts Preload -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" type="text/css" />
+    </noscript>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Meta Pixel noscript tag -->
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=579590157880412&ev=PageView&noscript=1" /></noscript>
+    
+    <!-- CTA Tracking Script -->
+    <script defer>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+          const target = e.target.closest('a, button');
+          if (target) {
+            const label = target.getAttribute('aria-label') || target.innerText;
+            const href = target.getAttribute('href');
+            
+            // Simple console log to simulate tracking
+            if (href && (href.includes('heart.cityheart.run') || href.includes('mailto:'))) {
+              console.log('CTA Click Tracked:', {
+                element: target.tagName,
+                label: label,
+                destination: href,
+                timestamp: new Date().toISOString()
+              });
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

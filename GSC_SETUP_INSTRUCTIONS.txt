@@ -1,0 +1,31 @@
+GOOGLE SEARCH CONSOLE SETUP GUIDE FOR CITYHEART
+
+1. Access Google Search Console
+   - Go to https://search.google.com/search-console
+
+2. Add Property
+   - Click "Add property" in the top left dropdown
+   - Choose "Domain" property type (recommended)
+   - Enter: cityheart.run
+   - Click Continue
+
+3. Verify Ownership
+   - Copy the TXT record provided by Google
+   - Log in to your domain registrar (where you bought cityheart.run)
+   - Add a new DNS record:
+     * Type: TXT
+     * Name/Host: @ (or leave blank)
+     * Value: [Paste the Google verification string]
+   - Wait 5-10 minutes for DNS propagation
+   - Click "Verify" in Google Search Console
+
+4. Submit Sitemap
+   - In GSC sidebar, click "Sitemaps"
+   - Under "Add a new sitemap", enter: sitemap.xml
+   - Click "Submit"
+   - Verify status becomes "Success"
+
+5. Ongoing Monitoring
+   - Check "Pages" under Indexing to ensure pages are being crawled
+   - Check "Page Experience" and "Core Web Vitals"
+   - Monitor "Performance" for search queries and clicks
