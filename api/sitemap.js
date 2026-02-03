@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   );
 
   try {
-    const { data: routes, error } = await supabase.from('routes').select('slug');
+    const { data: routes, error } = await supabase.from('public_routes').select('slug');
     
     if (error) throw error;
 
