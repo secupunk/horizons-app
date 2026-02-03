@@ -4,6 +4,8 @@ import { ModalProvider } from './context/ModalContext';
 import LandingPage from './components/LandingPage';
 import RoutesPage from './components/pages/RoutesPage';
 import RouteDetailPage from './components/pages/RouteDetailPage';
+// AJOUT ICI :
+import ComparePage from './components/pages/ComparePage'; 
 import FreeLandingPage from './components/pages/FreeLandingPage';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
@@ -18,12 +20,9 @@ import { Toaster } from './components/ui/toaster';
 const AnalyticsWrapper = ({ children }) => {
   const location = useLocation();
   useEffect(() => {
-    // GA Tracking
     trackGAPageView(location.pathname + location.search);
-    // Meta Pixel Tracking
     trackPixelPageView();
-    
-    window.scrollTo(0, 0); // Scroll to top on route change
+    window.scrollTo(0, 0); 
   }, [location]);
   return children;
 };
@@ -47,6 +46,10 @@ function App() {
             } />
             <Route path="/routes" element={<RoutesPage />} />
             <Route path="/routes/:slug" element={<RouteDetailPage />} />
+            
+            {/* AJOUT ICI : La route de comparaison */}
+            <Route path="/compare/:slug1-vs-:slug2" element={<ComparePage />} />
+            
             <Route path="/free" element={<FreeLandingPage />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
