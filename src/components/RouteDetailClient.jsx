@@ -1,7 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-// On a supprimé l'import de RouteDetailClientContent qui faisait planter le build
 const RouteDetailClient = ({ route }) => {
   if (!route) return null;
 
@@ -18,11 +17,13 @@ const RouteDetailClient = ({ route }) => {
         </h1>
         
         <div className="rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/5 mb-8">
-          <img 
-            src={route.image_url} 
-            alt={route.city} 
-            className="w-full h-auto object-cover"
-          />
+          {route.image_url && (
+            <img 
+              src={route.image_url} 
+              alt={route.city} 
+              className="w-full h-auto object-cover"
+            />
+          )}
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
