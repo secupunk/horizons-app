@@ -1,0 +1,33 @@
+# CityHeart
+
+> Discover romantic running routes in cities worldwide
+
+## Project Description
+CityHeart helps runners and walkers create unforgettable romantic memories by tracing heart-shaped GPS routes through their favorite cities.
+
+## Key Features
+- Curated romantic routes in 100+ cities
+- Shareable route cards and social media assets
+- Instant GPX downloads and QR codes for quick start
+- Strava and Garmin integration
+- Route discovery by city, distance, and activity type
+
+## Pricing
+- Early adopter pricing available
+- Single Heart: €4.99
+- Lover's Pack (3 routes): €9.99
+- Explorer Pack (10 routes + World Cup cities): €24.99
+
+## How to Use
+1. Browse routes at https://cityheart.run/routes
+2. Purchase a route or pack
+3. Download the GPX file or scan the QR code
+4. Sync with your watch or phone app
+5. Run, walk, or cycle the heart shape
+6. Share your art with loved ones
+
+## Main Links
+- Homepage: https://cityheart.run/
+- Routes: https://cityheart.run/routes
+- Pricing: https://cityheart.run/#pricing
+- FAQ: https://cityheart.run/#faq
