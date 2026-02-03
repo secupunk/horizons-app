@@ -4,7 +4,6 @@ import { ModalProvider } from './context/ModalContext';
 import LandingPage from './components/LandingPage';
 import RoutesPage from './components/pages/RoutesPage';
 import RouteDetailPage from './components/pages/RouteDetailPage';
-// AJOUT ICI :
 import ComparePage from './components/pages/ComparePage'; 
 import FreeLandingPage from './components/pages/FreeLandingPage';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
@@ -47,8 +46,8 @@ function App() {
             <Route path="/routes" element={<RoutesPage />} />
             <Route path="/routes/:slug" element={<RouteDetailPage />} />
             
-            {/* AJOUT ICI : La route de comparaison */}
-            <Route path="/compare/:slug1-vs-:slug2" element={<ComparePage />} />
+            {/* ROUTE SIMPLIFIÉE POUR ÉVITER L'ÉCRAN BLANC */}
+            <Route path="/compare/:slug1/:slug2" element={<ComparePage />} />
             
             <Route path="/free" element={<FreeLandingPage />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
