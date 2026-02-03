@@ -1,0 +1,49 @@
+:root {
+  /* Core Colors */
+  --color-bg-dark: #0A0E27;
+  --color-bg-card: #12162e;
+  --color-primary: #ec4899; /* Pink 500 */
+  --color-primary-hover: #db2777; /* Pink 600 */
+  --color-accent: #22d3ee; /* Cyan 400 */
+  --color-text-main: #ffffff;
+  --color-text-muted: #94a3b8;
+  
+  /* Gradients */
+  --gradient-brand: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+  --gradient-dark: linear-gradient(180deg, rgba(10,14,39,0) 0%, #0A0E27 100%);
+  --gradient-glow: radial-gradient(circle at center, rgba(236, 72, 153, 0.15) 0%, transparent 70%);
+
+  /* Typography */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Poppins', sans-serif;
+
+  /* Spacing */
+  --section-spacing: 6rem;
+}
+
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+
+.bg-brand-dark { background-color: var(--color-bg-dark); }
+.text-gradient {
+  background: linear-gradient(to right, #f472b6, #ec4899, #ef4444);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn-primary {
+  background: var(--gradient-brand);
+  color: white;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.5);
+}
+
+.section-padding {
+  padding-top: var(--section-spacing);
+  padding-bottom: var(--section-spacing);
+}
