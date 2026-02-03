@@ -4,6 +4,7 @@ import { ModalProvider } from './context/ModalContext';
 import LandingPage from './components/LandingPage';
 import RoutesPage from './components/pages/RoutesPage';
 import RouteDetailPage from './components/pages/RouteDetailPage';
+import ComparePage from './components/pages/ComparePage'; // AJOUTÉ : Importation de l'IA Duel
 import FreeLandingPage from './components/pages/FreeLandingPage';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
@@ -47,6 +48,10 @@ function App() {
             } />
             <Route path="/routes" element={<RoutesPage />} />
             <Route path="/routes/:slug" element={<RouteDetailPage />} />
+            
+            {/* NEW : The World Comparison Ghost Route */}
+            <Route path="/compare/:slug1-vs-:slug2" element={<ComparePage />} />
+            
             <Route path="/free" element={<FreeLandingPage />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
