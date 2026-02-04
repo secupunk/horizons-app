@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite --host :: --port 3000",
-    "build": "vite build",
+    "build": "node tools/generate-llms.js || true && vite build",
     "preview": "vite preview --host :: --port 3000",
     "eslint": "eslint src"
   },
@@ -29,7 +29,7 @@
     "qrcode.react": "^3.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-helmet-async": "^2.0.5",
+    "react-helmet": "^6.1.0",
     "react-router-dom": "^6.16.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
