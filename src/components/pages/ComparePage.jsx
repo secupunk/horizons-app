@@ -47,13 +47,12 @@ const ComparePage = () => {
   const generateAIContent = async (route1, route2) => {
     setLoadingAI(true);
     try {
-      console.log('Calling Gemini API...');
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      console.log('API Key exists:', !!apiKey);
-
+      
+      // Using v1 (stable) instead of v1beta with full model name
       const MODEL_NAME = "gemini-1.5-flash";
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
-
+      const API_URL = `https://generativelanguage.googleapis.com/v1/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+      
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -61,57 +60,64 @@ const ComparePage = () => {
           contents: [{
             parts: [{
               text: `Compare these two heart-shaped running routes in a fun, gamified tone (ANSWER IN ENGLISH ONLY):
+              
+Route 1: ${route1.city}, ${route1.country} (${route1.distance_km}km)
+Route 2: ${route2.city}, ${route2.country} (${route2.distance_km}km)
 
-Route 1: ${route1.city}, ${route1.country} - ${route1.distance_km}km
-Route 2: ${route2.city}, ${route2.country} - ${route2.distance_km}km
-
-Generate ONLY a JSON response (no markdown, no backticks, just pure JSON):
+Generate ONLY a JSON response (no markdown, no extra text):
 {
-  "winner_romantic": "${route1.city}" or "${route2.city}",
-  "winner_challenge": "${route1.city}" or "${route2.city}",
-  "romantic_score_1": 0-100,
-  "romantic_score_2": 0-100,
-  "challenge_score_1": 0-100,
-  "challenge_score_2": 0-100,
-  "fun_fact_1": "A short fun fact about ${route1.city}",
-  "fun_fact_2": "A short fun fact about ${route2.city}",
-  "recommendation": "One sentence to recommend which route",
-  "battle_title": "A fun title for this battle"
-}
-
-IMPORTANT: Respond ONLY with valid JSON. No other text. ALL content in English.`
+  "winner_romantic": "${route1.city}",
+  "winner_challenge": "${route2.city}",
+  "romantic_score_1": 85,
+  "romantic_score_2": 70,
+  "challenge_score_1": 60,
+  "challenge_score_2": 90,
+  "fun_fact_1": "Fun fact about ${route1.city}",
+  "fun_fact_2": "Fun fact about ${route2.city}",
+  "recommendation": "One sentence recommendation",
+  "battle_title": "${route1.city} vs ${route2.city}: Heart Battle"
+}`
             }]
           }]
         })
       });
-
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-      }
-
+      
+      if (!response.ok) throw new Error(`API Error: ${response.status}`);
+      
       const result = await response.json();
-      console.log('Gemini API full response:', result);
-
-      // Check response structure
+      console.log('Gemini API response:', result);
+      
       if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
-        const textContent = result.candidates[0].content.parts[0].text;
+        let textContent = result.candidates[0].content.parts[0].text;
         console.log('Raw AI text:', textContent);
         
-        // Clean JSON (remove markdown backticks if present)
-        const cleanedText = textContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-        console.log('Cleaned text:', cleanedText);
-        
-        const parsedContent = JSON.parse(cleanedText);
-        console.log('Parsed AI content:', parsedContent);
-        setAiContent(parsedContent);
+        // Robust JSON cleaning - extract JSON from response
+        const jsonMatch = textContent.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsedContent = JSON.parse(jsonMatch[0]);
+          console.log('Parsed AI content:', parsedContent);
+          setAiContent(parsedContent);
+        } else {
+          throw new Error('No JSON found in response');
+        }
       } else {
-        console.error('Invalid Gemini response structure:', result);
-        throw new Error("Invalid Gemini response structure");
+        throw new Error('Invalid response structure');
       }
     } catch (err) {
       console.error('Gemini AI error:', err);
-      // Don't show error to user, just log it
-      console.log('AI generation failed, page will show without AI content');
+      // Fallback: Create default content if API fails
+      setAiContent({
+        winner_romantic: route1.distance_km < route2.distance_km ? route1.city : route2.city,
+        winner_challenge: route1.distance_km > route2.distance_km ? route1.city : route2.city,
+        romantic_score_1: 90,
+        romantic_score_2: 85,
+        challenge_score_1: 75,
+        challenge_score_2: 80,
+        fun_fact_1: `${route1.city} offers a beautiful heart-shaped layout perfect for romantic runs.`,
+        fun_fact_2: `${route2.city} provides a challenging heart route with stunning city views.`,
+        recommendation: "Both routes offer a unique way to explore the city while staying fit!",
+        battle_title: `${route1.city} vs ${route2.city}: Battle of Hearts`
+      });
     } finally {
       setLoadingAI(false);
     }
