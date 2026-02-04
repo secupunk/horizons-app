@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 import { routesService } from '../../services/routesService';
 import { MapPin, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
