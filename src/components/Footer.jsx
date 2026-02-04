@@ -44,6 +44,14 @@ export default function Footer() {
               <li><Link to="/compare/running-heart-berlin-vs-running-heart-tokyo" className="hover:text-white transition-colors">Berlin vs Tokyo</Link></li>
               <li><Link to="/compare/running-heart-amsterdam-vs-running-heart-rotterdam" className="hover:text-white transition-colors">Amsterdam vs Rotterdam</Link></li>
               <li><Link to="/compare/running-heart-barcelona-vs-running-heart-madrid" className="hover:text-white transition-colors">Barcelona vs Madrid</Link></li>
+              
+              {/* LIEN CRUCIAL POUR LE SEO : Le Hub qui contient tous les autres duels */}
+              <li className="pt-4 non-italic">
+                <Link to="/compare" className="text-pink-500 hover:text-pink-400 font-bold flex items-center gap-1 group">
+                  View All Battles 
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </li>
             </ul>
           </div>
 
