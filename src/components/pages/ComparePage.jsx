@@ -26,6 +26,7 @@ const ComparePage = () => {
           setError("One of the routes couldn't be found in the database.");
         } else {
           setData({ r1: res1, r2: res2 });
+          // Trigger the secure AI call
           generateAIContent(res1, res2);
         }
       } catch (err) {
@@ -46,46 +47,21 @@ const ComparePage = () => {
   const generateAIContent = async (route1, route2) => {
     setLoadingAI(true);
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      
-      // Using 'latest' version which often resolves 404 errors
-      const MODEL = "gemini-1.5-flash-latest"; 
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
-      
-      const response = await fetch(API_URL, {
+      // 1. Call YOUR secure Vercel API endpoint
+      const response = await fetch('/api/compare', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `Compare these two heart-shaped running routes. Answer ONLY with a raw JSON object in English.
-              Route 1: ${route1.city} (${route1.distance_km}km)
-              Route 2: ${route2.city} (${route2.distance_km}km)
-              JSON format: { "winner_romantic": "", "winner_challenge": "", "romantic_score_1": 0, "romantic_score_2": 0, "challenge_score_1": 0, "challenge_score_2": 0, "fun_fact_1": "", "fun_fact_2": "", "recommendation": "", "battle_title": "" }`
-            }]
-          }]
-        })
+        body: JSON.stringify({ route1, route2 })
       });
-      
-      if (!response.ok) throw new Error(`API Error: ${response.status}`);
-      
+
+      if (!response.ok) throw new Error('Proxy API Error');
+
       const result = await response.json();
-      
-      if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
-        let textContent = result.candidates[0].content.parts[0].text;
-        
-        // Clean extraction of JSON
-        const firstBrace = textContent.indexOf('{');
-        const lastBrace = textContent.lastIndexOf('}');
-        
-        if (firstBrace !== -1 && lastBrace !== -1) {
-          const jsonString = textContent.substring(firstBrace, lastBrace + 1);
-          setAiContent(JSON.parse(jsonString));
-        }
-      }
+      setAiContent(result);
+
     } catch (err) {
-      console.error('Gemini AI error:', err);
-      // Fallback that saves the UI
+      console.error('AI Processing error:', err);
+      // 2. FALLBACK: If the API fails, show default values so the UI doesn't break
       setAiContent({
         winner_romantic: route1.distance_km < route2.distance_km ? route1.city : route2.city,
         winner_challenge: route1.distance_km > route2.distance_km ? route1.city : route2.city,
@@ -147,6 +123,7 @@ const ComparePage = () => {
     <div style={{ background: '#0A0E27', minHeight: '100vh', color: 'white', paddingTop: '120px', paddingBottom: '50px' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         
+        {/* Battle Title */}
         <h1 style={{ textAlign: 'center', fontSize: '2.5rem', marginBottom: '10px', fontStyle: 'italic', textTransform: 'uppercase' }}>
           {aiContent?.battle_title || `${data.r1.city} VS ${data.r2.city}`}
         </h1>
@@ -154,12 +131,14 @@ const ComparePage = () => {
           ⚔️ Heart Battle ⚔️
         </p>
 
+        {/* AI Loading State */}
         {loadingAI && (
           <div style={{ textAlign: 'center', padding: '20px', background: '#1F2937', borderRadius: '15px', marginBottom: '30px' }}>
-            <p>🤖 AI is analyzing the routes...</p>
+            <p>🤖 AI is analyzing the routes securely...</p>
           </div>
         )}
 
+        {/* AI Content Result */}
         {aiContent && (
           <div style={{ background: 'linear-gradient(135deg, #FF1493 0%, #9333EA 100%)', padding: '30px', borderRadius: '20px', marginBottom: '40px' }}>
             <h2 style={{ fontSize: '1.8rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -201,6 +180,7 @@ const ComparePage = () => {
           </div>
         )}
 
+        {/* Hard Stats Section */}
         {stats && (
           <div style={{ background: '#1F2937', padding: '30px', borderRadius: '20px', marginBottom: '40px' }}>
             <h2 style={{ fontSize: '1.8rem', marginBottom: '20px', textAlign: 'center' }}>📊 Battle Stats</h2>
@@ -230,13 +210,9 @@ const ComparePage = () => {
           </div>
         )}
 
+        {/* Individual City Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
           <div style={{ background: '#111827', borderRadius: '20px', overflow: 'hidden', border: '2px solid #FF1493', position: 'relative' }}>
-            {aiContent?.winner_romantic === data.r1.city && (
-              <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#FF1493', padding: '8px 15px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 'bold', zIndex: 10 }}>
-                ❤️ Most Romantic
-              </div>
-            )}
             <img src={data.r1.image_url} alt={data.r1.city} style={{ width: '100%', height: '250px', objectFit: 'cover' }} />
             <div style={{ padding: '20px' }}>
               <h2 style={{ fontSize: '1.8rem', marginBottom: '10px' }}>{data.r1.city}</h2>
@@ -244,26 +220,17 @@ const ComparePage = () => {
                 <MapPin size={16} />
                 <span>{data.r1.country}</span>
               </div>
-              <p style={{ fontSize: '1.3rem', color: '#FF1493', fontWeight: 'bold', marginBottom: '10px' }}>
-                Distance: {data.r1.distance_km} km
-              </p>
+              <p style={{ fontSize: '1.3rem', color: '#FF1493', fontWeight: 'bold' }}>{data.r1.distance_km} km</p>
               {aiContent?.fun_fact_1 && (
-                <p style={{ fontSize: '0.9rem', opacity: 0.8, fontStyle: 'italic', marginBottom: '15px', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
-                  💡 {aiContent.fun_fact_1}
-                </p>
+                <p style={{ fontSize: '0.9rem', opacity: 0.8, fontStyle: 'italic', marginTop: '15px' }}>💡 {aiContent.fun_fact_1}</p>
               )}
-              <Link to={`/routes/${data.r1.slug}`} style={{ display: 'block', textAlign: 'center', background: '#FF1493', color: 'white', padding: '12px', borderRadius: '10px', textDecoration: 'none', marginTop: '20px', fontWeight: 'bold' }}>
+              <Link to={`/routes/${data.r1.slug}`} style={{ display: 'block', textAlign: 'center', background: '#FF1493', color: 'white', padding: '12px', borderRadius: '10px', textDecoration: 'none', marginTop: '20px' }}>
                 View Route
               </Link>
             </div>
           </div>
 
           <div style={{ background: '#111827', borderRadius: '20px', overflow: 'hidden', border: '2px solid #3b82f6', position: 'relative' }}>
-            {aiContent?.winner_romantic === data.r2.city && (
-              <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#FF1493', padding: '8px 15px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 'bold', zIndex: 10 }}>
-                ❤️ Most Romantic
-              </div>
-            )}
             <img src={data.r2.image_url} alt={data.r2.city} style={{ width: '100%', height: '250px', objectFit: 'cover' }} />
             <div style={{ padding: '20px' }}>
               <h2 style={{ fontSize: '1.8rem', marginBottom: '10px' }}>{data.r2.city}</h2>
@@ -271,27 +238,21 @@ const ComparePage = () => {
                 <MapPin size={16} />
                 <span>{data.r2.country}</span>
               </div>
-              <p style={{ fontSize: '1.3rem', color: '#3b82f6', fontWeight: 'bold', marginBottom: '10px' }}>
-                Distance: {data.r2.distance_km} km
-              </p>
+              <p style={{ fontSize: '1.3rem', color: '#3b82f6', fontWeight: 'bold' }}>{data.r2.distance_km} km</p>
               {aiContent?.fun_fact_2 && (
-                <p style={{ fontSize: '0.9rem', opacity: 0.8, fontStyle: 'italic', marginBottom: '15px', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
-                  💡 {aiContent.fun_fact_2}
-                </p>
+                <p style={{ fontSize: '0.9rem', opacity: 0.8, fontStyle: 'italic', marginTop: '15px' }}>💡 {aiContent.fun_fact_2}</p>
               )}
-              <Link to={`/routes/${data.r2.slug}`} style={{ display: 'block', textAlign: 'center', background: '#3b82f6', color: 'white', padding: '12px', borderRadius: '10px', textDecoration: 'none', marginTop: '20px', fontWeight: 'bold' }}>
+              <Link to={`/routes/${data.r2.slug}`} style={{ display: 'block', textAlign: 'center', background: '#3b82f6', color: 'white', padding: '12px', borderRadius: '10px', textDecoration: 'none', marginTop: '20px' }}>
                 View Route
               </Link>
             </div>
           </div>
         </div>
 
+        {/* CTA Footer */}
         <div style={{ textAlign: 'center', marginTop: '50px', padding: '30px', background: 'linear-gradient(135deg, #FF1493 0%, #9333EA 100%)', borderRadius: '20px' }}>
           <h3 style={{ fontSize: '2rem', marginBottom: '15px' }}>Ready to trace your heart?</h3>
-          <p style={{ marginBottom: '20px', opacity: 0.9 }}>
-            Each route only €4.99 • GPS-perfect • Instant download
-          </p>
-          <Link to="/routes" style={{ display: 'inline-block', background: 'white', color: '#FF1493', padding: '15px 40px', borderRadius: '30px', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.1rem' }}>
+          <Link to="/routes" style={{ display: 'inline-block', background: 'white', color: '#FF1493', padding: '15px 40px', borderRadius: '30px', textDecoration: 'none', fontWeight: 'bold' }}>
             View all routes →
           </Link>
         </div>
