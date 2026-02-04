@@ -51,8 +51,8 @@ const ComparePage = () => {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       console.log('API Key exists:', !!apiKey);
 
-      // FIXED: Using gemini-1.5-flash model with correct endpoint
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      // Using correct Gemini REST API endpoint
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
