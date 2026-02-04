@@ -67,7 +67,7 @@ const ComparePage = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
           {/* CARTE VILLE 1 */}
           <div style={{ background: '#111827', borderRadius: '20px', overflow: 'hidden', border: '1px solid #374151' }}>
-            <img src={data.r1.image_url} alt={data.r1.city} style={{ width: '100%', height: '250px', objectCover: 'cover' }} />
+            <img src={data.r1.image_url} alt={data.r1.city} style={{ width: '100%', height: '250px', objectFit: 'cover' }} />
             <div style={{ padding: '20px' }}>
               <h2>{data.r1.city}</h2>
               <p>Distance : {data.r1.distance_km} km</p>
@@ -79,7 +79,7 @@ const ComparePage = () => {
 
           {/* CARTE VILLE 2 */}
           <div style={{ background: '#111827', borderRadius: '20px', overflow: 'hidden', border: '1px solid #374151' }}>
-            <img src={data.r2.image_url} alt={data.r2.city} style={{ width: '100%', height: '250px', objectCover: 'cover' }} />
+            <img src={data.r2.image_url} alt={data.r2.city} style={{ width: '100%', height: '250px', objectFit: 'cover' }} />
             <div style={{ padding: '20px' }}>
               <h2>{data.r2.city}</h2>
               <p>Distance : {data.r2.distance_km} km</p>
