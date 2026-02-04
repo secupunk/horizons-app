@@ -51,21 +51,21 @@ const ComparePage = () => {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       console.log('API Key exists:', !!apiKey);
 
-      // Using correct Gemini REST API endpoint
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+      const MODEL_NAME = "gemini-1.5-flash";
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+
+      const response = await fetch(API_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `Compare these two heart-shaped running routes in a fun, gamified tone (in ENGLISH):
+              text: `Compare these two heart-shaped running routes in a fun, gamified tone (ANSWER IN ENGLISH ONLY):
 
 Route 1: ${route1.city}, ${route1.country} - ${route1.distance_km}km
 Route 2: ${route2.city}, ${route2.country} - ${route2.distance_km}km
 
-Generate ONLY a JSON response (no text before or after):
+Generate ONLY a JSON response (no markdown, no backticks, just pure JSON):
 {
   "winner_romantic": "${route1.city}" or "${route2.city}",
   "winner_challenge": "${route1.city}" or "${route2.city}",
@@ -73,35 +73,45 @@ Generate ONLY a JSON response (no text before or after):
   "romantic_score_2": 0-100,
   "challenge_score_1": 0-100,
   "challenge_score_2": 0-100,
-  "fun_fact_1": "A short fun fact about ${route1.city} (in English)",
-  "fun_fact_2": "A short fun fact about ${route2.city} (in English)",
-  "recommendation": "One sentence to recommend which route based on runner profile (beginner, romantic, athletic) - in English",
-  "battle_title": "A fun title for this battle (e.g., 'Capital Cities Clash!', 'Hearts Battle!') - in English"
+  "fun_fact_1": "A short fun fact about ${route1.city}",
+  "fun_fact_2": "A short fun fact about ${route2.city}",
+  "recommendation": "One sentence to recommend which route",
+  "battle_title": "A fun title for this battle"
 }
 
-Be creative, fun and precise. Scores must be consistent with distances. ALL TEXT IN ENGLISH.`
+IMPORTANT: Respond ONLY with valid JSON. No other text. ALL content in English.`
             }]
           }]
         })
       });
 
-      const result = await response.json();
-      console.log('Gemini API response:', result);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+      }
 
+      const result = await response.json();
+      console.log('Gemini API full response:', result);
+
+      // Check response structure
       if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
         const textContent = result.candidates[0].content.parts[0].text;
-        // Clean JSON (remove ```json if present)
+        console.log('Raw AI text:', textContent);
+        
+        // Clean JSON (remove markdown backticks if present)
         const cleanedText = textContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-        console.log('Cleaned AI response:', cleanedText);
+        console.log('Cleaned text:', cleanedText);
+        
         const parsedContent = JSON.parse(cleanedText);
+        console.log('Parsed AI content:', parsedContent);
         setAiContent(parsedContent);
       } else {
-        console.error('No valid content from Gemini:', result);
+        console.error('Invalid Gemini response structure:', result);
+        throw new Error("Invalid Gemini response structure");
       }
     } catch (err) {
       console.error('Gemini AI error:', err);
-      // Show error instead of fallback
-      setError('AI content generation failed. Please refresh the page.');
+      // Don't show error to user, just log it
+      console.log('AI generation failed, page will show without AI content');
     } finally {
       setLoadingAI(false);
     }
