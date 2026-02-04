@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 import HeroImage from '../components/HeroImage';
 import CallToAction from '../components/CallToAction';
 import WelcomeMessage from '../components/WelcomeMessage';
