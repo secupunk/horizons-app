@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { routesService } from '../../services/routesService';
-import { Scale, ChevronRight, Heart } from 'lucide-react';
+import { Scale, ChevronRight } from 'lucide-react';
 
 const CompareDirectory = () => {
   const [routes, setRoutes] = useState([]);
@@ -24,6 +24,8 @@ const CompareDirectory = () => {
 
   const generateMatchups = () => {
     const pairs = [];
+    if (!routes || routes.length < 2) return pairs;
+    
     for (let i = 0; i < routes.length; i++) {
       for (let j = i + 1; j < routes.length; j++) {
         pairs.push({ r1: routes[i], r2: routes[j] });
@@ -34,7 +36,13 @@ const CompareDirectory = () => {
 
   const matchups = generateMatchups();
 
-  if (loading) return <div className="min-h-screen bg-[#0A0E27] flex items-center justify-center text-white">Chargement des duels...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0A0E27] flex items-center justify-center text-white italic">
+        Chargement des duels...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0A0E27] text-white pt-32 pb-20">
@@ -49,20 +57,24 @@ const CompareDirectory = () => {
         </h1>
 
         <div className="grid gap-4">
-          {matchups.map((pair) => (
-            <Link 
-              key={`${pair.r1.id}-${pair.r2.id}`}
-              to={`/compare/${pair.r1.slug}-vs-${pair.r2.slug}`}
-              className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl flex items-center justify-between hover:border-pink-500 transition-all"
-            >
-              <div className="flex items-center gap-8">
-                <span className="font-bold text-lg">{pair.r1.city}</span>
-                <span className="text-pink-500 font-black italic">VS</span>
-                <span className="font-bold text-lg">{pair.r2.city}</span>
-              </div>
-              <ChevronRight className="text-slate-500" />
-            </Link>
-          ))}
+          {matchups.length > 0 ? (
+            matchups.map((pair) => (
+              <Link 
+                key={`${pair.r1.id}-${pair.r2.id}`}
+                to={`/compare/${pair.r1.slug}-vs-${pair.r2.slug}`}
+                className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl flex items-center justify-between hover:border-pink-500 transition-all"
+              >
+                <div className="flex items-center gap-8 text-sm md:text-lg">
+                  <span className="font-bold">{pair.r1.city}</span>
+                  <span className="text-pink-500 font-black italic">VS</span>
+                  <span className="font-bold">{pair.r2.city}</span>
+                </div>
+                <ChevronRight className="text-slate-500" />
+              </Link>
+            ))
+          ) : (
+            <p className="text-slate-500 text-center py-10">Aucun duel disponible pour le moment.</p>
+          )}
         </div>
       </div>
     </div>
