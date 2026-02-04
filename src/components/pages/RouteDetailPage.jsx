@@ -10,19 +10,23 @@ const RouteDetailPage = () => {
 
   useEffect(() => {
     const getRoute = async () => {
-      const data = await routesService.getRouteBySlug(slug);
-      setRoute(data);
+      try {
+        const data = await routesService.getRouteBySlug(slug);
+        setRoute(data);
+      } catch (err) {
+        console.error("Erreur detail:", err);
+      }
     };
     getRoute();
   }, [slug]);
 
-  if (!route) return <div className="min-h-screen bg-[#0A0E27] flex items-center justify-center text-white italic">Loading route...</div>;
+  if (!route) return <div className="min-h-screen bg-[#0A0E27] flex items-center justify-center text-white italic">Loading...</div>;
 
   return (
     <div className="bg-[#0A0E27] min-h-screen pt-32 pb-20 px-6 text-white">
       <Helmet>
         <title>{`${route.city} Heart Route | CityHeart.run`}</title>
-        <meta name="description" content={`Download the ${route.distance_km}km heart-shaped running route in ${route.city}.`} />
+        <meta name="description" content={`Download the heart-shaped running route in ${route.city}.`} />
       </Helmet>
 
       <div className="max-w-4xl mx-auto">
@@ -42,7 +46,7 @@ const RouteDetailPage = () => {
             <div className="text-3xl font-bold mb-6">{route.distance_km} km</div>
             
             <p className="text-slate-400 mb-8 leading-relaxed">
-              Discover this heart-shaped route in {route.city}. Optimized for GPS accuracy and scenery.
+              Experience the perfect heart-shaped run in {route.city}.
             </p>
 
             <button className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all uppercase tracking-widest mb-4">
