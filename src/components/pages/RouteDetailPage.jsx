@@ -1,141 +1,62 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { routesService } from '../../services/routesService';
-import { useToast } from '../ui/use-toast';
-import RouteDetailClient from '../RouteDetailClient';
-import RouteNotFound from '../routes/RouteNotFound';
+import { ChevronLeft, Download, MapPin, Share2 } from 'lucide-react';
 
-/**
- * RouteDetailPage Container
- * Handles data fetching, SEO Metadata injection, and error states.
- * Acts as the "Server Component" equivalent in this SPA architecture.
- */
-export default function RouteDetailPage() {
+const RouteDetailPage = () => {
   const { slug } = useParams();
   const [route, setRoute] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
-    const fetchRouteData = async () => {
-      setLoading(true);
-      setNotFound(false);
-      try {
-        const data = await routesService.getRouteBySlug(slug);
-        
-        // Simulating "Server Component" logic: strict filtering
-        if (data && data.is_public === true) {
-          setRoute(data);
-          // View count increment disabled to prevent RPC errors
-        } else {
-          setNotFound(true);
-        }
-      } catch (error) {
-        console.error("Error loading route:", error);
-        toast({
-            title: "Error",
-            description: "Could not load route details.",
-            variant: "destructive"
-        });
-        setNotFound(true);
-      } finally {
-        setLoading(false);
-      }
+    const getRoute = async () => {
+      const data = await routesService.getRouteBySlug(slug);
+      setRoute(data);
     };
+    getRoute();
+  }, [slug]);
 
-    if (slug) {
-      fetchRouteData();
-    }
-  }, [slug, toast]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A0E27]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FF1493]"></div>
-      </div>
-    );
-  }
-
-  if (notFound || !route) {
-    return <RouteNotFound />;
-  }
-
-  // Calculate duration for Schema (Math.round(distance * 10) minutes)
-  const distance = parseFloat(route.distance_km || 0);
-  const durationMinutes = Math.round(distance * 10);
-
-  // Schema.org ExercisePlan Markup
-  const schemaMarkup = {
-    "@context": "https://schema.org",
-    "@type": "ExercisePlan",
-    "name": route.title,
-    "description": route.description || `A ${distance}km heart-shaped running route in ${route.city}.`,
-    "image": route.image_url,
-    "url": `https://cityheart.run/routes/${route.slug}`,
-    "activityDuration": `PT${durationMinutes}M`,
-    "exerciseType": "Running",
-    "intensity": route.difficulty || "Moderate",
-    "workDistance": {
-      "@type": "QuantitativeValue",
-      "value": distance,
-      "unitCode": "KMT"
-    },
-    "location": {
-      "@type": "Place",
-      "name": route.city,
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": route.city,
-        "addressCountry": "Unknown" 
-      },
-      // Safely access nested coordinates if they exist
-      "geo": (route.coordinates && route.coordinates[0]) ? {
-        "@type": "GeoCoordinates",
-        "latitude": parseFloat(route.coordinates[0].lat),
-        "longitude": parseFloat(route.coordinates[0].lng)
-      } : undefined
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": "4.99",
-      "priceCurrency": "EUR",
-      "availability": "https://schema.org/InStock"
-    }
-  };
+  if (!route) return <div className="min-h-screen bg-[#0A0E27] flex items-center justify-center text-white italic">Loading route...</div>;
 
   return (
-    <>
+    <div className="bg-[#0A0E27] min-h-screen pt-32 pb-20 px-6 text-white">
       <Helmet>
-        {/* Basic Meta */}
-        <title>{`${route.title} - ${route.distance_km}km Running Route | CityHeart`}</title>
-        <meta name="description" content={route.description || `Customize and download the ${route.title} GPX file. A ${route.distance_km}km heart-shaped running route in ${route.city}.`} />
-        <meta name="keywords" content={`running route ${route.city}, heart shaped route ${route.city}, strava art ${route.city}, gpx download ${route.city}, public running routes`} />
-        <link rel="canonical" href={`https://cityheart.run/routes/${route.slug}`} />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="place" />
-        <meta property="og:title" content={`${route.title} - Personalize Route`} />
-        <meta property="og:description" content={`Running Route in ${route.city} (${route.distance_km}km). Customize this route now.`} />
-        <meta property="og:image" content={route.image_url} />
-        <meta property="og:url" content={`https://cityheart.run/routes/${route.slug}`} />
-        <meta property="og:site_name" content="CityHeart" />
-        
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={route.title} />
-        <meta name="twitter:description" content={`Running Route in ${route.city}. Download GPX now.`} />
-        <meta name="twitter:image" content={route.image_url} />
-
-        {/* JSON-LD Schema Injection */}
-        <script type="application/ld+json">
-          {JSON.stringify(schemaMarkup)}
-        </script>
+        <title>{`${route.city} Heart Route | CityHeart.run`}</title>
+        <meta name="description" content={`Download the ${route.distance_km}km heart-shaped running route in ${route.city}.`} />
       </Helmet>
 
-      {/* Render Client Component */}
-      <RouteDetailClient route={route} />
-    </>
+      <div className="max-w-4xl mx-auto">
+        <Link to="/routes" className="text-slate-400 hover:text-white flex items-center gap-2 mb-8 transition-colors">
+          <ChevronLeft size={20} /> Back to all routes
+        </Link>
+
+        <div className="grid md:grid-cols-2 gap-12">
+          <div>
+            <img src={route.image_url} alt={route.city} className="w-full rounded-3xl shadow-2xl border border-white/5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 text-pink-500 font-bold uppercase tracking-widest text-sm mb-2">
+              <MapPin size={16} /> {route.country}
+            </div>
+            <h1 className="text-5xl font-black italic uppercase mb-4 tracking-tighter">{route.city}</h1>
+            <div className="text-3xl font-bold mb-6">{route.distance_km} km</div>
+            
+            <p className="text-slate-400 mb-8 leading-relaxed">
+              Discover this heart-shaped route in {route.city}. Optimized for GPS accuracy and scenery.
+            </p>
+
+            <button className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all uppercase tracking-widest mb-4">
+              <Download size={20} /> Download GPX (€4.99)
+            </button>
+            
+            <button className="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all uppercase tracking-widest border border-white/10">
+              <Share2 size={20} /> Share
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default RouteDetailPage;
