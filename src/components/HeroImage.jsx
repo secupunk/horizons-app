@@ -4,12 +4,12 @@ import ValentineCountdown from './ValentineCountdown';
 const HeroImage = () => {
   return (
     <div className="flex flex-col items-center w-full">
-      {/* 1. Le Compte à rebours */}
+      {/* On appelle le compteur ICI et UNIQUEMENT ici */}
       <ValentineCountdown />
 
-      {/* 2. Le Titre Massif en Italique */}
-      <h1 className="text-5xl md:text-[110px] font-[900] italic uppercase tracking-tighter leading-[0.9] mt-12 mb-4 text-center">
-        RUN WITH YOUR <span className="text-[#FF4D94]">HEART</span>
+      {/* Ton titre stylé de la capture d'écran */}
+      <h1 className="text-6xl md:text-[110px] font-black italic uppercase tracking-tighter leading-[0.85] mt-12 text-center text-white">
+        RUN WITH YOUR <span className="text-[#E94E91]">HEART</span>
       </h1>
     </div>
   );
