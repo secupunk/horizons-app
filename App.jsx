@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async'; // Added for SEO
 import { ModalProvider } from './context/ModalContext';
 import LandingPage from './components/LandingPage';
 import RoutesPage from './components/pages/RoutesPage';
@@ -13,7 +14,6 @@ import Navbar from './components/Navbar';
 import ValentineCountdown from './components/ValentineCountdown';
 import { Toaster } from './components/ui/toaster';
 
-// Version simplifiée pour éviter que le site crash si GA ou Pixel bug
 const AnalyticsWrapper = ({ children }) => {
   const location = useLocation();
   useEffect(() => {
@@ -24,34 +24,39 @@ const AnalyticsWrapper = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <ModalProvider>
-        <AnalyticsWrapper>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={
-              <>
-                <div className="pt-24 bg-[#0A0E27]">
-                  <ValentineCountdown />
-                </div>
-                <LandingPage />
-              </>
-            } />
-            <Route path="/routes" element={<RoutesPage />} />
-            <Route path="/routes/:slug" element={<RouteDetailPage />} />
-            
-            {/* ROUTE DE COMPARAISON */}
-            <Route path="/compare/:slug1-vs-:slug2" element={<ComparePage />} />
-            
-            <Route path="/free" element={<FreeLandingPage />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/refund-policy" element={<RefundPolicy />} />
-          </Routes>
-        </AnalyticsWrapper>
-        <Toaster />
-      </ModalProvider>
-    </Router>
+    <HelmetProvider> {/* Wrap everything for SEO Meta Management */}
+      <Router>
+        <ModalProvider>
+          <AnalyticsWrapper>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={
+                <>
+                  <div className="pt-24 bg-[#0A0E27]">
+                    <ValentineCountdown />
+                  </div>
+                  <LandingPage />
+                </>
+              } />
+              
+              <Route path="/routes" element={<RoutesPage />} />
+              <Route path="/routes/:slug" element={<RouteDetailPage />} />
+              
+              {/* SEO-Optimized Comparison Route 
+                URL Example: /compare/paris-heart-vs-london-heart 
+              */}
+              <Route path="/compare/:slug1-vs-:slug2" element={<ComparePage />} />
+              
+              <Route path="/free" element={<FreeLandingPage />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
+            </Routes>
+          </AnalyticsWrapper>
+          <Toaster />
+        </ModalProvider>
+      </Router>
+    </HelmetProvider>
   );
 }
 
