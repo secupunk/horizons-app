@@ -1,69 +1,58 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async'; // Changé ici
-import { Heart, Zap, Trophy, MapPin, ChevronRight, Star } from 'lucide-react';
-import ValentineCountdown from './ValentineCountdown';
+import { Helmet } from 'react-helmet-async';
+import { Heart, Download, Gift, ArrowRight } from 'lucide-react';
 
-const LandingPage = () => {
+const FreeLandingPage = () => {
   return (
-    <div className="bg-[#0A0E27] min-h-screen text-white">
+    <div className="bg-[#0A0E27] min-h-screen text-white pt-32 pb-20 px-6">
       <Helmet>
-        <title>CityHeart.run | Trace Heart-Shaped Running Routes</title>
-        <meta name="description" content="Turn your run into art. Discover heart-shaped GPS running routes in cities worldwide." />
+        <title>Free Heart Routes | CityHeart.run</title>
+        <meta name="description" content="Download free heart-shaped running routes to try our GPX files." />
       </Helmet>
 
-      {/* Hero Section */}
-      <section className="relative pt-20 pb-32 overflow-hidden">
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6 leading-none">
-              Run with your <span className="text-pink-500 not-italic">Heart</span>
-            </h1>
-            <p className="text-xl text-slate-400 mb-10 leading-relaxed">
-              Discover and download GPS-ready heart-shaped running routes in the world's most beautiful cities.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/routes" className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-8 rounded-full transition-all text-lg uppercase tracking-widest">
-                Browse Routes
-              </Link>
-              <Link to="/free" className="bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-full transition-all text-lg uppercase tracking-widest border border-white/10">
-                Try for Free
-              </Link>
-            </div>
-          </div>
+      <div className="max-w-4xl mx-auto text-center">
+        <div className="inline-block bg-pink-500/20 text-pink-500 p-4 rounded-full mb-8">
+          <Gift size={40} />
         </div>
-      </section>
+        
+        <h1 className="text-5xl font-black italic uppercase mb-6 tracking-tighter">
+          Free <span className="text-pink-500">Samples</span>
+        </h1>
+        
+        <p className="text-xl text-slate-400 mb-12 max-w-2xl mx-auto">
+          Not sure how GPX art works? Download one of our starter routes for free and see how it looks on your watch or Strava.
+        </p>
 
-      {/* Features */}
-      <section className="py-20 bg-white/5 border-y border-white/5">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="bg-pink-500/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <MapPin className="text-pink-500" size={32} />
-              </div>
-              <h3 className="text-xl font-bold mb-4 uppercase italic">Global Cities</h3>
-              <p className="text-slate-400">Routes professionally mapped in Paris, London, Tokyo, and more.</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-blue-500/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Trophy className="text-blue-500" size={32} />
-              </div>
-              <h3 className="text-xl font-bold mb-4 uppercase italic">GPX Ready</h3>
-              <p className="text-slate-400">Instant download for your Garmin, Apple Watch, or Strava.</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-yellow-500/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Star className="text-yellow-500" size={32} />
-              </div>
-              <h3 className="text-xl font-bold mb-4 uppercase italic">Perfect Shapes</h3>
-              <p className="text-slate-400">Every route is tested to ensure a perfect heart shape on your GPS.</p>
-            </div>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Exemple de carte pour une route gratuite */}
+          <div className="bg-slate-900 border border-white/5 p-8 rounded-3xl text-left">
+            <h3 className="text-2xl font-bold mb-2">Starter Heart - Berlin</h3>
+            <p className="text-slate-500 mb-6">A simple 5km route perfect for testing your device compatibility.</p>
+            <button className="w-full bg-white text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-pink-500 hover:text-white transition-all">
+              <Download size={20} /> Download GPX
+            </button>
+          </div>
+
+          <div className="bg-slate-900 border border-white/5 p-8 rounded-3xl text-left">
+            <h3 className="text-2xl font-bold mb-2">Mini Heart - Paris</h3>
+            <p className="text-slate-500 mb-6">A beautiful 3km loop through the local parks of Paris.</p>
+            <button className="w-full bg-white text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-pink-500 hover:text-white transition-all">
+              <Download size={20} /> Download GPX
+            </button>
           </div>
         </div>
-      </section>
+
+        <div className="mt-16 p-8 bg-pink-500/10 rounded-3xl border border-pink-500/20">
+          <h2 className="text-2xl font-bold mb-4">Ready for more?</h2>
+          <p className="text-slate-400 mb-6">Access our full catalog of premium heart routes in over 50 cities.</p>
+          <Link to="/routes" className="inline-flex items-center gap-2 text-pink-500 font-bold uppercase tracking-widest hover:gap-4 transition-all">
+            Browse Premium Routes <ArrowRight size={20} />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default LandingPage;
+export default FreeLandingPage;
