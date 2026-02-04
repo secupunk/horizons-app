@@ -10,8 +10,12 @@ const RoutesPage = () => {
 
   useEffect(() => {
     const fetchRoutes = async () => {
-      const data = await routesService.getAllRoutes();
-      setRoutes(data || []);
+      try {
+        const data = await routesService.getAllRoutes();
+        setRoutes(data || []);
+      } catch (err) {
+        console.error("Erreur routes:", err);
+      }
     };
     fetchRoutes();
   }, []);
@@ -29,7 +33,7 @@ const RoutesPage = () => {
       </Helmet>
 
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-black italic uppercase mb-8">All Routes</h1>
+        <h1 className="text-4xl font-black italic uppercase mb-8 text-white">All Routes</h1>
         
         <div className="relative mb-12">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
