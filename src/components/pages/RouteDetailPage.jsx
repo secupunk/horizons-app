@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 import { routesService } from '../../services/routesService';
 import { ChevronLeft, Download, MapPin, Share2 } from 'lucide-react';
 
