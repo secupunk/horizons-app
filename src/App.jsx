@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async'; 
+import { HelmetProvider } from 'react-helmet-async';
 import { ModalProvider } from './context/ModalContext';
 import LandingPage from './components/LandingPage';
 import RoutesPage from './components/pages/RoutesPage';
 import RouteDetailPage from './components/pages/RouteDetailPage';
 import ComparePage from './components/pages/ComparePage';
-import CompareDirectory from './components/pages/CompareDirectory'; // Importé ici
+import CompareDirectory from './components/pages/CompareDirectory';
 import FreeLandingPage from './components/pages/FreeLandingPage';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
@@ -39,10 +39,10 @@ function App() {
                   <LandingPage />
                 </>
               } />
+              
               <Route path="/routes" element={<RoutesPage />} />
               <Route path="/routes/:slug" element={<RouteDetailPage />} />
               
-              {/* NOUVELLES ROUTES SEO */}
               <Route path="/compare" element={<CompareDirectory />} />
               <Route path="/compare/:slug1-vs-:slug2" element={<ComparePage />} />
               
